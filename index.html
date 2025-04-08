@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Compliance Focus Form – de Risk Partners</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #007bff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+    .container {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 10px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .hidden {
+      display: none;
+    }
+    label {
+      font-weight: bold;
+      text-align: left;
+      margin: 10px auto 5px;
+      width: 80%;
+      display: block;
+    }
+    input[type="text"], input[type="email"], select, textarea {
+      display: block;
+      width: 80%;
+      margin: 0 auto 15px;
+      padding: 8px;
+      border: 2px solid #007bff;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    textarea {
+      height: 100px;
+      resize: vertical;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .center-logo img {
+      max-width: 120px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="center-logo">
+      <img src="de-risk-partners.jpg" alt="de Risk Partners Logo">
+    </div>
+    <h2>Compliance Focus Form</h2>
+    <form action="https://formsubmit.co/aaraizasif0110@gmail.com" method="POST">
+      <input type="hidden" name="_captcha" value="false">
+
+      <label for="name">Name:</label>
+      <input type="text" name="Name" id="name" required>
+
+      <label for="title">Title:</label>
+      <input type="text" name="Title" id="title" required>
+
+      <label for="organization">Organization:</label>
+      <input type="text" name="Organization" id="organization" required>
+
+      <label for="email">Email:</label>
+      <input type="email" name="Email" id="email" required>
+
+      <label for="therapy">Compliance Therapy:</label>
+      <select name="Compliance Therapy" id="therapy" required>
+        <option value="">--Select an area--</option>
+        <option>BSA/AML Program</option>
+        <option>Staffing Constraints</option>
+        <option>Technology Support</option>
+        <option>CRA/HMDA</option>
+        <option>Fair Lending / UDAAP</option>
+        <option>Information Security and Cyber Risk</option>
+        <option>Lack of scalability or Automation</option>
+      </select>
+
+      <label for="concern">Please describe your concern:</label>
+      <textarea name="Concern" id="concern" placeholder="Type your concern here..."></textarea>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</body>
+</html>
