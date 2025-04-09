@@ -88,15 +88,9 @@
 
     <!-- Page 2 -->
     <div id="page2" class="hidden">
-      <form action="https://formsubmit.co/aaraizasif0110@gmail.com" method="POST">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="Name" id="form-name">
-        <input type="hidden" name="Title" id="form-title">
-        <input type="hidden" name="Organization" id="form-org">
-        <input type="hidden" name="Email" id="form-email">
-
+      <form id="compliance-form">
         <label for="therapy">Compliance Therapy:</label>
-        <select name="Compliance Therapy" id="therapy" required>
+        <select id="therapy" required>
           <option value="">-- Select --</option>
           <option>BSA/AML Program</option>
           <option>Staffing Constraints</option>
@@ -109,14 +103,20 @@
         </select>
 
         <label for="concern">Please describe your Compliance Pain Point:</label>
-        <textarea name="Concern" id="concern" placeholder="Type your concern here..."></textarea>
+        <textarea id="concern" placeholder="Type your concern here..."></textarea>
 
         <button type="submit">Submit</button>
       </form>
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    const supabaseUrl = "https://jzxiqailbudeakztkzpc.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6eGlxYWlsYnVkZWFrenRrenBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyMjk0NTcsImV4cCI6MjA1OTgwNTQ1N30.zT5Rst78LcU9A3q29VhQsYV7jiogxcH0m0aUwW7zF2M";
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
     function goToPage2() {
       const name = document.getElementById("name").value.trim();
       const title = document.getElementById("title").value.trim();
@@ -128,14 +128,39 @@
         return;
       }
 
-      document.getElementById("form-name").value = name;
-      document.getElementById("form-title").value = title;
-      document.getElementById("form-org").value = org;
-      document.getElementById("form-email").value = email;
+      // Store user data temporarily
+      sessionStorage.setItem("name", name);
+      sessionStorage.setItem("title", title);
+      sessionStorage.setItem("organization", org);
+      sessionStorage.setItem("email", email);
 
       document.getElementById("page1").classList.add("hidden");
       document.getElementById("page2").classList.remove("hidden");
     }
+
+    const form = document.getElementById("compliance-form");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = {
+        name: sessionStorage.getItem("name"),
+        title: sessionStorage.getItem("title"),
+        organization: sessionStorage.getItem("organization"),
+        email: sessionStorage.getItem("email"),
+        therapy: document.getElementById("therapy").value,
+        concern: document.getElementById("concern").value
+      };
+
+      const { error } = await supabase.from("submissions").insert([data]);
+
+      if (error) {
+        alert("Submission failed: " + error.message);
+      } else {
+        alert("Submitted successfully!");
+        form.reset();
+      }
+    });
   </script>
 </body>
 </html>
+
