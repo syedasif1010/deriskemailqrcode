@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Compliance Therapy Results</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h2>Compliance Therapy Submissions</h2>
+  <canvas id="complianceChart" width="600" height="400"></canvas>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    const supabaseUrl = "https://jzxiqailbudeakztkzpc.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6eGlxYWlsYnVkZWFrenRrenBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyMjk0NTcsImV4cCI6MjA1OTgwNTQ1N30.zT5Rst78LcU9A3q29VhQsYV7jiogxcH0m0aUwW7zF2M";
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const { data, error } = await supabase.from("submissions").select("therapy");
+
+    const counts = {};
+    data.forEach(entry => {
+      const key = entry.therapy;
+      counts[key] = (counts[key] || 0) + 1;
+    });
+
+    const ctx = document.getElementById("complianceChart").getContext("2d");
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: Object.keys(counts),
+        datasets: [{
+          label: "Compliance Therapy Responses",
+          data: Object.values(counts),
+          backgroundColor: "rgba(0, 123, 255, 0.7)"
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
