@@ -107,10 +107,22 @@
 
         <button type="submit">Submit</button>
       </form>
+
+      <!-- Hidden email form to send notification -->
+      <form action="https://formsubmit.co/aaraizasif0110@gmail.com" method="POST" id="email-form" class="hidden">
+        <input type="hidden" name="_subject" value="New Compliance Form Submission">
+        <input type="hidden" name="Name" id="email-name">
+        <input type="hidden" name="Title" id="email-title">
+        <input type="hidden" name="Organization" id="email-org">
+        <input type="hidden" name="Email" id="email-email">
+        <input type="hidden" name="Compliance Therapy" id="email-therapy">
+        <input type="hidden" name="Concern" id="email-concern">
+        <input type="hidden" name="_captcha" value="false">
+      </form>
     </div>
   </div>
 
-  <!-- Script for page switch logic -->
+  <!-- Page 1 to Page 2 Switch -->
   <script>
     function goToPage2() {
       const name = document.getElementById("name").value.trim();
@@ -133,7 +145,7 @@
     }
   </script>
 
-  <!-- Supabase + Submit Script -->
+  <!-- Supabase + Email Integration -->
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
@@ -159,6 +171,17 @@
       if (error) {
         alert("Submission failed: " + error.message);
       } else {
+        // Fill hidden email form
+        document.getElementById("email-name").value = data.name;
+        document.getElementById("email-title").value = data.title;
+        document.getElementById("email-org").value = data.organization;
+        document.getElementById("email-email").value = data.email;
+        document.getElementById("email-therapy").value = data.therapy;
+        document.getElementById("email-concern").value = data.concern;
+
+        // Submit the hidden form to send email
+        document.getElementById("email-form").submit();
+
         alert("Submitted successfully!");
         form.reset();
       }
@@ -166,5 +189,6 @@
   </script>
 </body>
 </html>
+
 
 
