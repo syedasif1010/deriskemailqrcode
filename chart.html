@@ -2,23 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Live Chart – Compliance Therapy</title>
+  <title>Live Chart – Firebase</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      font-size: 12px;
       background-color: #f4f4f4;
-      margin: 0;
-      padding: 20px;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      height: 100vh;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
     }
     .chart-container {
       background: white;
-      padding: 15px 20px;
+      padding: 20px;
       border-radius: 10px;
       max-width: 320px;
       width: 100%;
@@ -26,12 +27,11 @@
       text-align: center;
     }
     h2 {
-      margin: 10px 0;
       font-size: 16px;
+      margin-bottom: 10px;
     }
     canvas {
       max-width: 280px;
-      margin-top: 15px;
     }
   </style>
 </head>
@@ -42,15 +42,27 @@
   </div>
 
   <script>
-    const counts = JSON.parse(localStorage.getItem("therapyCounts")) || {};
+    const firebaseConfig = {'apiKey': 'AIzaSyChWMsC2UTOs0MPPq0SqwEMDp1aH5X783E', 'authDomain': 'deriskformproject.firebaseapp.com', 'databaseURL': 'https://deriskformproject-default-rtdb.firebaseio.com', 'projectId': 'deriskformproject', 'storageBucket': 'deriskformproject.firebasestorage.app', 'messagingSenderId': '816507817940', 'appId': '1:816507817940:web:ab8a385b7069c0efedd041', 'measurementId': 'G-1TL5XFWMKM'};
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const counts = {
+      "BSA/AML Program": 0,
+      "Staffing Constraints": 0,
+      "Technology Support": 0,
+      "CRA/HMDA": 0,
+      "Fair Lending / UDAAP": 0,
+      "Information Security and Cyber Risk": 0,
+      "Lack of scalability or Automation": 0
+    };
 
     const ctx = document.getElementById("liveChart").getContext("2d");
-    new Chart(ctx, {
+    const chart = new Chart(ctx, {
       type: "pie",
       data: {
         labels: Object.keys(counts),
         datasets: [{
-          label: "Compliance Therapy Selections",
           data: Object.values(counts),
           backgroundColor: [
             "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40", "#009688"
@@ -63,6 +75,22 @@
           legend: { position: 'bottom' }
         }
       }
+    });
+
+    db.ref("submissions").on("value", (snapshot) => {
+      const data = snapshot.val();
+      for (const key in counts) counts[key] = 0;  // reset
+
+      if (data) {
+        Object.values(data).forEach(entry => {
+          if (entry.therapy && counts.hasOwnProperty(entry.therapy)) {
+            counts[entry.therapy]++;
+          }
+        });
+      }
+
+      chart.data.datasets[0].data = Object.values(counts);
+      chart.update();
     });
   </script>
 </body>
