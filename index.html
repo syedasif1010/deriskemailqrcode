@@ -110,7 +110,7 @@
         <label for="concern">Please describe your Compliance Pain Point:</label>
         <textarea name="Concern" id="concern" placeholder="Type your concern here..."></textarea>
 
-        <button type="submit">Submit</button>
+        <button type="submit" onclick="saveToLocalStorage()">Submit</button>
       </form>
     </div>
   </div>
@@ -135,6 +135,28 @@
       document.getElementById("page1").classList.add("hidden");
       document.getElementById("page2").classList.remove("hidden");
     }
+
+    function saveToLocalStorage() {
+      const selected = document.getElementById("therapy").value;
+      if (!selected) return;
+
+      const counts = JSON.parse(localStorage.getItem("therapyCounts")) || {
+        "BSA/AML Program": 0,
+        "Staffing Constraints": 0,
+        "Technology Support": 0,
+        "CRA/HMDA": 0,
+        "Fair Lending / UDAAP": 0,
+        "Information Security and Cyber Risk": 0,
+        "Lack of scalability or Automation": 0,
+      };
+
+      if (counts[selected] !== undefined) {
+        counts[selected]++;
+        localStorage.setItem("therapyCounts", JSON.stringify(counts));
+      }
+    }
   </script>
 </body>
 </html>
+
+    
