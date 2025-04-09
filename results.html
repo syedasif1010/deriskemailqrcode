@@ -22,9 +22,23 @@
       padding: 20px;
       border-radius: 10px;
     }
+    .nav {
+      margin-bottom: 20px;
+    }
+    .nav a {
+      text-decoration: none;
+      color: #007bff;
+      margin: 0 10px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
+  <div class="nav">
+    <a href="index.html">📝 Submit Form</a> | 
+    <a href="results.html">📊 View Results</a>
+  </div>
+
   <h2>Live Compliance Therapy Results</h2>
   <canvas id="complianceChart" width="600" height="400"></canvas>
 
@@ -35,43 +49,64 @@
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6eGlxYWlsYnVkZWFrenRrenBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyMjk0NTcsImV4cCI6MjA1OTgwNTQ1N30.zT5Rst78LcU9A3q29VhQsYV7jiogxcH0m0aUwW7zF2M";
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { data, error } = await supabase.from("submissions").select("therapy");
-
-    if (error) {
-      alert("Failed to fetch data: " + error.message);
-    }
-
-    const counts = {};
-    data.forEach(entry => {
-      const key = entry.therapy;
-      if (key) {
-        counts[key] = (counts[key] || 0) + 1;
-      }
-    });
-
     const ctx = document.getElementById("complianceChart").getContext("2d");
-    new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: Object.keys(counts),
-        datasets: [{
-          label: "Therapy Responses",
-          data: Object.values(counts),
-          backgroundColor: "rgba(0, 123, 255, 0.7)"
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              stepSize: 1
+    let chart;
+
+    async function loadDataAndUpdateChart() {
+      const { data, error } = await supabase.from("submissions").select("therapy");
+
+      if (error) {
+        console.error("Fetch error:", error);
+        return;
+      }
+
+      const counts = {};
+      data.forEach(entry => {
+        const key = entry.therapy;
+        if (key) {
+          counts[key] = (counts[key] || 0) + 1;
+        }
+      });
+
+      const labels = Object.keys(counts);
+      const values = Object.values(counts);
+
+      if (chart) {
+        chart.data.labels = labels;
+        chart.data.datasets[0].data = values;
+        chart.update();
+      } else {
+        chart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [{
+              label: "Therapy Responses",
+              data: values,
+              backgroundColor: "rgba(0, 123, 255, 0.7)"
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1
+                }
+              }
             }
           }
-        }
+        });
       }
-    });
+    }
+
+    // Load immediately
+    await loadDataAndUpdateChart();
+
+    // Reload every 10 seconds
+    setInterval(loadDataAndUpdateChart, 10000);
   </script>
 </body>
 </html>
+
