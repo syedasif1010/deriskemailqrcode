@@ -3,14 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <title>Compliance Form – de Risk Partners</title>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #007bff;
       margin: 0;
-      padding: 0;
+      background-color: #007bff;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -19,101 +16,110 @@
     }
     .container {
       background: white;
-      padding: 30px 25px;
+      padding: 40px 30px;
       border-radius: 10px;
-      max-width: 400px;
+      max-width: 500px;
       width: 100%;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       text-align: center;
-    }
-    .center-logo img {
-      max-width: 120px;
-      margin-bottom: 15px;
     }
     .hidden {
       display: none;
     }
     label {
+      font-weight: bold;
       text-align: left;
+      margin: 10px auto 5px;
+      width: 80%;
       display: block;
-      margin: 10px 0 5px;
     }
     input, select, textarea {
-      width: 100%;
+      width: 80%;
+      margin: 0 auto 15px;
       padding: 8px;
       border: 2px solid #007bff;
       border-radius: 5px;
-      margin-bottom: 15px;
       font-size: 14px;
+      display: block;
     }
     textarea {
-      height: 80px;
+      height: 100px;
+      resize: vertical;
     }
     button {
+      padding: 10px 20px;
       background-color: #007bff;
       color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-size: 15px;
+      border-radius: 4px;
       cursor: pointer;
+      font-size: 15px;
+      margin-top: 10px;
     }
-    button:hover {
-      background-color: #0056b3;
+    .center-logo img {
+      max-width: 120px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="center-logo">
-      <img src="de-risk-partners.jpg" alt="de Risk Partners Logo" />
+      <img src="de-risk-partners.jpg" alt="de Risk Partners Logo">
     </div>
 
     <!-- Page 1 -->
     <div id="page1">
       <h2>Welcome! Please enter your info to begin</h2>
-      <label>Name:</label>
+      <label for="name">Name:</label>
       <input type="text" id="name" required>
-      <label>Title:</label>
+
+      <label for="title">Title:</label>
       <input type="text" id="title" required>
-      <label>Organization:</label>
-      <input type="text" id="org" required>
-      <label>Email:</label>
+
+      <label for="organization">Organization:</label>
+      <input type="text" id="organization" required>
+
+      <label for="email">Email:</label>
       <input type="email" id="email" required>
+
       <button onclick="goToPage2()">Next</button>
     </div>
 
     <!-- Page 2 -->
     <div id="page2" class="hidden">
-      <h2>Compliance Therapy Focus</h2>
-      <label>Compliance Therapy:</label>
-      <select id="therapy" required>
-        <option value="">--Select--</option>
-        <option>BSA/AML Program</option>
-        <option>Staffing Constraints</option>
-        <option>Technology Support</option>
-        <option>CRA/HMDA</option>
-        <option>Fair Lending / UDAAP</option>
-        <option>Information Security and Cyber Risk</option>
-        <option>Lack of scalability or Automation</option>
-      </select>
+      <form action="https://formsubmit.co/aaraizasif0110@gmail.com" method="POST">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="Name" id="form-name">
+        <input type="hidden" name="Title" id="form-title">
+        <input type="hidden" name="Organization" id="form-org">
+        <input type="hidden" name="Email" id="form-email">
 
-      <label>Concern:</label>
-      <textarea id="concern" placeholder="Type your concern here..."></textarea>
-      <button onclick="submitForm()">Submit</button>
+        <label for="therapy">Compliance Therapy:</label>
+        <select name="Compliance Therapy" id="therapy" required>
+          <option value="">-- Select --</option>
+          <option>BSA/AML Program</option>
+          <option>Staffing Constraints</option>
+          <option>Technology Support</option>
+          <option>CRA/HMDA</option>
+          <option>Fair Lending / UDAAP</option>
+          <option>Information Security and Cyber Risk</option>
+          <option>Lack of scalability or Automation</option>
+        </select>
+
+        <label for="concern">Please describe your Compliance Pain Point:</label>
+        <textarea name="Concern" id="concern" placeholder="Type your concern here..."></textarea>
+
+        <button type="submit">Submit</button>
+      </form>
     </div>
   </div>
 
   <script>
-    const firebaseConfig = {'apiKey': 'AIzaSyChWMsC2UTOs0MPPq0SqwEMDp1aH5X783E', 'authDomain': 'deriskformproject.firebaseapp.com', 'databaseURL': 'https://deriskformproject-default-rtdb.firebaseio.com', 'projectId': 'deriskformproject', 'storageBucket': 'deriskformproject.firebasestorage.app', 'messagingSenderId': '816507817940', 'appId': '1:816507817940:web:ab8a385b7069c0efedd041', 'measurementId': 'G-1TL5XFWMKM'};
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
     function goToPage2() {
       const name = document.getElementById("name").value.trim();
       const title = document.getElementById("title").value.trim();
-      const org = document.getElementById("org").value.trim();
+      const org = document.getElementById("organization").value.trim();
       const email = document.getElementById("email").value.trim();
 
       if (!name || !title || !org || !email) {
@@ -121,31 +127,13 @@
         return;
       }
 
+      document.getElementById("form-name").value = name;
+      document.getElementById("form-title").value = title;
+      document.getElementById("form-org").value = org;
+      document.getElementById("form-email").value = email;
+
       document.getElementById("page1").classList.add("hidden");
       document.getElementById("page2").classList.remove("hidden");
-    }
-
-    function submitForm() {
-      const name = document.getElementById("name").value.trim();
-      const title = document.getElementById("title").value.trim();
-      const org = document.getElementById("org").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const therapy = document.getElementById("therapy").value;
-      const concern = document.getElementById("concern").value;
-
-      if (!therapy) {
-        alert("Please select a Compliance Therapy.");
-        return;
-      }
-
-      db.ref("submissions").push({
-        name, title, organization: org, email, therapy, concern
-      }).then(() => {
-        alert("Thank you! Your submission was recorded.");
-        window.location.href = "chart.html";
-      }).catch(err => {
-        alert("Error: " + err.message);
-      });
     }
   </script>
 </body>
