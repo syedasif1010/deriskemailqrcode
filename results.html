@@ -71,9 +71,23 @@
       const labels = Object.keys(counts);
       const values = Object.values(counts);
 
+      const colorMap = {
+        "BSA/AML Program": "#007bff",
+        "Staffing Constraints": "#28a745",
+        "Technology Support": "#ffc107",
+        "CRA/HMDA": "#dc3545",
+        "Fair Lending / UDAAP": "#6610f2",
+        "Information Security and Cyber Risk": "#fd7e14",
+        "Lack of scalability or Automation": "#20c997",
+        "Other": "#6c757d"
+      };
+
+      const backgroundColors = labels.map(label => colorMap[label] || "#343a40");
+
       if (chart) {
         chart.data.labels = labels;
         chart.data.datasets[0].data = values;
+        chart.data.datasets[0].backgroundColor = backgroundColors;
         chart.update();
       } else {
         chart = new Chart(ctx, {
@@ -83,7 +97,7 @@
             datasets: [{
               label: "Therapy Responses",
               data: values,
-              backgroundColor: "rgba(0, 123, 255, 0.7)"
+              backgroundColor: backgroundColors
             }]
           },
           options: {
@@ -101,12 +115,13 @@
       }
     }
 
-    // Load immediately
+    // Initial load
     await loadDataAndUpdateChart();
 
-    // Reload every 10 seconds
+    // Refresh every 10 seconds
     setInterval(loadDataAndUpdateChart, 10000);
   </script>
 </body>
 </html>
+
 
