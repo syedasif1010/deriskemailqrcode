@@ -2,11 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Compliance Therapy Results</title>
+  <title>Compliance Therapy Chart</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    canvas {
+      background: white;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 10px;
+    }
+  </style>
 </head>
 <body>
-  <h2>Compliance Therapy Submissions</h2>
+  <h2>Live Compliance Therapy Results</h2>
   <canvas id="complianceChart" width="600" height="400"></canvas>
 
   <script type="module">
@@ -18,10 +37,16 @@
 
     const { data, error } = await supabase.from("submissions").select("therapy");
 
+    if (error) {
+      alert("Failed to fetch data: " + error.message);
+    }
+
     const counts = {};
     data.forEach(entry => {
       const key = entry.therapy;
-      counts[key] = (counts[key] || 0) + 1;
+      if (key) {
+        counts[key] = (counts[key] || 0) + 1;
+      }
     });
 
     const ctx = document.getElementById("complianceChart").getContext("2d");
@@ -30,7 +55,7 @@
       data: {
         labels: Object.keys(counts),
         datasets: [{
-          label: "Compliance Therapy Responses",
+          label: "Therapy Responses",
           data: Object.values(counts),
           backgroundColor: "rgba(0, 123, 255, 0.7)"
         }]
@@ -39,7 +64,10 @@
         responsive: true,
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
           }
         }
       }
