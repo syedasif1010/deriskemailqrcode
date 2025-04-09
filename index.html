@@ -110,13 +110,8 @@
     </div>
   </div>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-    const supabaseUrl = "https://jzxiqailbudeakztkzpc.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6eGlxYWlsYnVkZWFrenRrenBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyMjk0NTcsImV4cCI6MjA1OTgwNTQ1N30.zT5Rst78LcU9A3q29VhQsYV7jiogxcH0m0aUwW7zF2M";
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
+  <!-- Script for page switch logic -->
+  <script>
     function goToPage2() {
       const name = document.getElementById("name").value.trim();
       const title = document.getElementById("title").value.trim();
@@ -128,7 +123,6 @@
         return;
       }
 
-      // Store user data temporarily
       sessionStorage.setItem("name", name);
       sessionStorage.setItem("title", title);
       sessionStorage.setItem("organization", org);
@@ -137,6 +131,15 @@
       document.getElementById("page1").classList.add("hidden");
       document.getElementById("page2").classList.remove("hidden");
     }
+  </script>
+
+  <!-- Supabase + Submit Script -->
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    const supabaseUrl = "https://jzxiqailbudeakztkzpc.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6eGlxYWlsYnVkZWFrenRrenBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyMjk0NTcsImV4cCI6MjA1OTgwNTQ1N30.zT5Rst78LcU9A3q29VhQsYV7jiogxcH0m0aUwW7zF2M";
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     const form = document.getElementById("compliance-form");
     form.addEventListener("submit", async (e) => {
@@ -163,4 +166,5 @@
   </script>
 </body>
 </html>
+
 
