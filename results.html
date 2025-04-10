@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f2f2f2;
+      background: #f8f9fa;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -17,10 +17,8 @@
       margin-bottom: 20px;
     }
     canvas {
-      background: white;
-      border: 1px solid #ccc;
-      padding: 20px;
-      border-radius: 10px;
+      max-width: 600px;
+      max-height: 600px;
     }
     .nav {
       margin-bottom: 20px;
@@ -39,8 +37,8 @@
     <a href="results.html">📊 View Results</a>
   </div>
 
-  <h2>Live Compliance Therapy Results</h2>
-  <canvas id="complianceChart" width="600" height="400"></canvas>
+  <h2>Live Compliance Therapy Distribution</h2>
+  <canvas id="complianceChart" width="400" height="400"></canvas>
 
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
@@ -72,17 +70,17 @@
       const values = Object.values(counts);
 
       const colorMap = {
-        "BSA/AML Program": "#007bff",
-        "Staffing Constraints": "#28a745",
-        "Technology Support": "#ffc107",
-        "CRA/HMDA": "#dc3545",
-        "Fair Lending / UDAAP": "#6610f2",
-        "Information Security and Cyber Risk": "#fd7e14",
-        "Lack of scalability or Automation": "#20c997",
-        "Other": "#6c757d"
+        "BSA/AML Program": "#f06292",
+        "Staffing Constraints": "#64b5f6",
+        "Technology Support": "#ffeb3b",
+        "CRA/HMDA": "#4db6ac",
+        "Fair Lending / UDAAP": "#9575cd",
+        "Information Security and Cyber Risk": "#ffa726",
+        "Lack of scalability or Automation": "#81c784",
+        "Other": "#90a4ae"
       };
 
-      const backgroundColors = labels.map(label => colorMap[label] || "#343a40");
+      const backgroundColors = labels.map(label => colorMap[label] || "#ccc");
 
       if (chart) {
         chart.data.labels = labels;
@@ -91,7 +89,7 @@
         chart.update();
       } else {
         chart = new Chart(ctx, {
-          type: "bar",
+          type: "doughnut",
           data: {
             labels: labels,
             datasets: [{
@@ -102,11 +100,12 @@
           },
           options: {
             responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-                ticks: {
-                  stepSize: 1
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  boxWidth: 20,
+                  padding: 15
                 }
               }
             }
@@ -115,13 +114,14 @@
       }
     }
 
-    // Initial load
+    // Load initially
     await loadDataAndUpdateChart();
 
-    // Refresh every 10 seconds
+    // Auto-refresh every 10 seconds
     setInterval(loadDataAndUpdateChart, 10000);
   </script>
 </body>
 </html>
+
 
 
